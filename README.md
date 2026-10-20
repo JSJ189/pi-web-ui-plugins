@@ -2,6 +2,10 @@
 
 > `pi-web-ui` 官方社区第三方插件清单仓库，供独立开发者与贡献者提交插件、GitHub Actions 自动化安全审查（CI Audit）与自动合并（Auto-Merge）。
 >
+> 🌐 **官方仓库**：[https://github.com/xing-shuyin/pi-web-ui-plugins](https://github.com/xing-shuyin/pi-web-ui-plugins)  
+> 📦 **清单订阅 (Pages)**：`https://xing-shuyin.github.io/pi-web-ui-plugins/catalog.json`  
+> 🖥️ **网页市场预览**：[https://xing-shuyin.github.io/pi-web-ui-plugins/](https://xing-shuyin.github.io/pi-web-ui-plugins/)
+>
 > 💡 **说明**：`pi-web-ui` 项目自带的官方内置插件（如 notes, vscode-editor, browser-use, tts 等）随主仓库直接分发维护，不需要且不在此仓库提交。本仓库专供第三方社区独立插件提交与收录。
 
 ---
@@ -102,7 +106,18 @@ npm run build
 
 本清单支持 **第三方开发者全自动提交插件** 与 **持续自动化安全审查**。只要你的开源插件满足基础规范，从提交到合并上架全流程无需人工介入！
 
-### ⚡ 核心提交流程（第三方全自动上线）
+### 🌟 提交到本仓库的核心优势
+
+| 优势特性                               | 说明                                                                                                                                                                     |
+| :------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ⚡ **无人值守全自动合并 (Auto-Merge)** | 普通工具/视图插件（低风险）提交 PR 后，GitHub Actions 机器人即时触发全自动安全审计，**校验通过后机器人自动 Approve 并秒级自动合并**，无需排队等待人工审批。              |
+| 🌐 **全球客户端即时曝光上线**          | 本清单是 `pi-web-ui` 服务端的**出厂默认订阅源**。PR 一经合并，约 1 分钟内全球所有用户的「插件市场」便能直接搜索并一键安装你的插件，享受庞大的用户生态。                  |
+| 🛡️ **全流程安全审查与信誉背书**        | 提交以及后续的**每一次修改与更新**，CI 机器人均会自动执行严格的代码安全扫描（JSON Schema 校验、SVG 图标 XSS 过滤、敏感权限审查及原作者防冒用篡改保护），让用户放心安装。 |
+| 🧩 **独立目录架构零冲突**              | 采用 `plugins/<id>/plugin.json` 独立隔离设计，多位开发者同时提交或更新不同插件绝不产生 Git 合并冲突。                                                                    |
+
+### ⚡ 核心提交流程（第三方全自动上线，4 步即可）
+
+- **提交入口仓库**：[**https://github.com/xing-shuyin/pi-web-ui-plugins**](https://github.com/xing-shuyin/pi-web-ui-plugins)
 
 ```text
 Fork 本仓库 -> 添加 plugins/<id>/plugin.json -> 发起 Pull Request -> CI 机器人自动化安全审查 -> 自动 Approve & 合并上线
