@@ -98,6 +98,45 @@ npm run build
 
 ---
 
-## 🤝 贡献插件
+## 🤝 插件提交与自动化审查说明
 
-请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md) 了解提交流程与规范。
+本清单支持 **第三方开发者全自动提交插件** 与 **持续自动化安全审查**。只要你的开源插件满足基础规范，从提交到合并上架全流程无需人工介入！
+
+### ⚡ 核心提交流程（第三方全自动上线）
+
+```text
+Fork 本仓库 -> 添加 plugins/<id>/plugin.json -> 发起 Pull Request -> CI 机器人自动化安全审查 -> 自动 Approve & 合并上线
+```
+
+1. **准备你的插件开源仓库**：
+   - 拥有公开的 GitHub 仓库，并包含标准开源协议（如 MIT、Apache-2.0 等）；
+   - 仓库根目录或子目录中包含合法的 `manifest.json`。
+2. **Fork 本仓库并添加元数据文件**：
+   在 `plugins/<你的插件ID>/` 目录下新建 `plugin.json`（可直接在 GitHub 网页端操作）：
+   ```json
+   {
+     "id": "my-plugin",
+     "name": "插件显示名称",
+     "source": "github用户名/插件仓库名",
+     "author": "github用户名",
+     "description": "这里填写插件的中文功能描述（必填，不少于 5 个字）",
+     "descriptionEn": "English description of the plugin (optional)",
+     "icon": "🚀",
+     "homepage": "https://github.com/github用户名/插件仓库名"
+   }
+   ```
+3. **发起 Pull Request 并享受全自动审查**：
+   - **单 PR 单插件**：每个 PR 仅添加或修改属于你自己的单一 `plugins/<id>/plugin.json`；
+   - **每次修改严格自动审查**：提交 PR 以及后续针对该 PR 的**每一次修改与 Push**，CI 都会自动触发安全审计，包括：
+     - JSON Schema 合规性校验；
+     - 远端仓库真实性、开源协议与 `manifest.json` 一致性核对；
+     - SVG 图标 XSS 脚本过滤与权限安全扫描；
+     - 对已有插件的修改核验提交者与原作者一致性（防篡改保护）。
+   - **无人值守自动合并（Auto-Merge）**：对于无高危敏感权限的普通工具/视图插件（LOW 风险），审查通过后机器人将**自动 Approve 并自动合并**，无需等待官方维护者手动审批。
+4. **极速同步上架**：
+   - PR 合并后，GitHub Actions 会在 1 分钟内自动重新构建 `dist/catalog.json` 并发布；
+   - 全球所有启动中的 `pi-web-ui` 客户端即可在插件市场中直接搜索、浏览并一键安装你的插件！
+
+> 💡 **官方内置插件说明**：随 `pi-web-ui` 核心程序发布的官方内置插件（如 notes, vscode-editor, browser-use, tts, tunnel 等）直接在 [主仓库 (xing-shuyin/pi-web-ui)](https://github.com/xing-shuyin/pi-web-ui) 的 `plugins/` 目录下维护，无需在本清单重复提交。本仓库专为第三方独立开源插件生态提供全自动收录通道。
+
+更详细的字段定义与规范请参阅 [CONTRIBUTING.md](./CONTRIBUTING.md)。
