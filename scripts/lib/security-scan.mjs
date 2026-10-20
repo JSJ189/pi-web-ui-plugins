@@ -20,7 +20,9 @@ export function auditSvgSecurity(svg) {
   const issues = [];
   for (const pattern of DANGEROUS_SVG_PATTERNS) {
     if (pattern.test(svg)) {
-      issues.push(`SVG contains forbidden unsafe pattern: ${pattern.toString()}`);
+      issues.push(
+        `SVG contains forbidden unsafe pattern: ${pattern.toString()}`,
+      );
     }
   }
   return {
@@ -58,7 +60,7 @@ export function auditSecurity(pluginData, remoteManifest) {
     // 特权 DOM 访问：需要在设置面板逐个授权
     if (risk !== "HIGH") risk = "MEDIUM";
     warnings.push(
-      "Plugin requests privileged 'dom' permission (requires user manual consent in UI settings). Human review recommended."
+      "Plugin requests privileged 'dom' permission (requires user manual consent in UI settings). Human review recommended.",
     );
   }
 
@@ -70,7 +72,7 @@ export function auditSecurity(pluginData, remoteManifest) {
   // 3. 检查 apiVersion
   if (remoteManifest?.apiVersion && remoteManifest.apiVersion > 2) {
     warnings.push(
-      `Plugin declares apiVersion ${remoteManifest.apiVersion}, which is newer than host supported version (2).`
+      `Plugin declares apiVersion ${remoteManifest.apiVersion}, which is newer than host supported version (2).`,
     );
   }
 

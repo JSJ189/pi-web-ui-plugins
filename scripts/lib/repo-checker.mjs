@@ -62,27 +62,46 @@ async function fetchRawFile(owner, repo, branch, path, token) {
 /**
  * 校验目标仓库与 manifest.json。
  */
-export async function auditRemoteRepo(pluginData, token = process.env.GITHUB_TOKEN) {
+export async function auditRemoteRepo(
+  pluginData,
+  token = process.env.GITHUB_TOKEN,
+) {
   const errors = [];
   const warnings = [];
   const parsed = parseSource(pluginData.source);
 
   if (!parsed) {
-    errors.push(`Invalid source format: "${pluginData.source}". Must be "owner/repo" or "owner/repo/subdir".`);
+    errors.push(
+      `Invalid source format: "${pluginData.source}". Must be "owner/repo" or "owner/repo/subdir".`,
+    );
     return { ok: false, errors, warnings, manifest: null };
   }
 
-  const manifestPath = parsed.subdir ? `${parsed.subdir}/manifest.json` : "manifest.json";
-  let manifestText = await fetchRawFile(parsed.owner, parsed.repo, parsed.branch, manifestPath, token);
+  const manifestPath = parsed.subdir
+    ? `${parsed.subdir}/manifest.json`
+    : "manifest.json";
+  let manifestText = await fetchRawFile(
+    parsed.owner,
+    parsed.repo,
+    parsed.branch,
+    manifestPath,
+    token,
+  );
 
   // 如果主分支是 master，做一次降级尝试
   if (!manifestText && parsed.branch === "main") {
-    manifestText = await fetchRawFile(parsed.owner, parsed.repo, "master", manifestPath, token);
+    manifestText = await fetchRawFile(
+      parsed.owner,
+      parsed.repo,
+      "master",
+      manifestPath,
+      token,
+    );
   }
 
   if (!manifestText) {
     warnings.push(
-      `Could not fetch "${manifestPath}" from ${parsed.owner}/${parsed.repo}#${parsed.branch}. (Check if repository is public and branch/subdir is correct)`
+      `Could not fetch "${manifestPath}" from ${parsed.owner}/${parsed.repo}#${parsed.branch}. (Check if repository is public and branch/subdir is correct)`,
     );
     // 网络问题时仅作为警告，不直接阻断本地无网开发，但在 CI 必须有
     return {
@@ -99,7 +118,13 @@ export async function auditRemoteRepo(pluginData, token = process.env.GITHUB_TOK
     manifest = JSON.parse(manifestText);
   } catch (err) {
     errors.push(`Failed to parse remote manifest.json: ${err.message}`);
-    return { ok: false, errors, warnings, manifest: null, parsedSource: parsed };
+    return {
+      ok: false,
+      errors,
+      warnings,
+      manifest: null,
+      parsedSource: parsed,
+    };
   }
 
   // 校验 manifest 规范
@@ -112,9 +137,21 @@ export async function auditRemoteRepo(pluginData, token = process.env.GITHUB_TOK
 
   // 检查 License
   const licensePath = parsed.subdir ? `${parsed.subdir}/LICENSE` : "LICENSE";
-  let licenseText = await fetchRawFile(parsed.owner, parsed.repo, parsed.branch, licensePath, token);
+  let licenseText = await fetchRawFile(
+    parsed.owner,
+    parsed.repo,
+    parsed.branch,
+    licensePath,
+    token,
+  );
   if (!licenseText) {
-    licenseText = await fetchRawFile(parsed.owner, parsed.repo, parsed.branch, "LICENSE.md", token);
+    licenseText = await fetchRawFile(
+      parsed.owner,
+      parsed.repo,
+      parsed.branch,
+      "LICENSE.md",
+      token,
+    );
   }
   if (!licenseText && !manifest.license) {
     warnings.push("No LICENSE or LICENSE.md file found in remote repository.");

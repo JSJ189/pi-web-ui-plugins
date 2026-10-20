@@ -2,7 +2,11 @@
 import { readFileSync, existsSync, appendFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { getChangedFiles, auditPrScope, listAllPlugins } from "./lib/pr-changes.mjs";
+import {
+  getChangedFiles,
+  auditPrScope,
+  listAllPlugins,
+} from "./lib/pr-changes.mjs";
 import { validatePluginSchema } from "./lib/schema-validator.mjs";
 import { auditRemoteRepo } from "./lib/repo-checker.mjs";
 import { auditSecurity } from "./lib/security-scan.mjs";
@@ -36,7 +40,9 @@ async function auditSinglePlugin(pluginId) {
       pluginId,
       passed: false,
       risk: "HIGH",
-      errors: [`Invalid JSON in plugins/${pluginId}/plugin.json: ${err.message}`],
+      errors: [
+        `Invalid JSON in plugins/${pluginId}/plugin.json: ${err.message}`,
+      ],
       warnings: [],
       details: {},
     };
@@ -47,7 +53,9 @@ async function auditSinglePlugin(pluginId) {
 
   // 1. 文件夹名与 id 一致性检查
   if (data.id !== pluginId) {
-    errors.push(`Directory name "${pluginId}" does not match plugin id "${data.id}".`);
+    errors.push(
+      `Directory name "${pluginId}" does not match plugin id "${data.id}".`,
+    );
   }
 
   // 2. Schema 校验
@@ -177,7 +185,7 @@ async function main() {
       if (process.env.GITHUB_STEP_SUMMARY) {
         appendFileSync(
           process.env.GITHUB_STEP_SUMMARY,
-          `## ❌ PR Scope Validation Failed\n\n${scope.errors.map((e) => `- ${e}`).join("\n")}\n`
+          `## ❌ PR Scope Validation Failed\n\n${scope.errors.map((e) => `- ${e}`).join("\n")}\n`,
         );
       }
       process.exit(1);
@@ -201,7 +209,7 @@ async function main() {
     appendFileSync(process.env.GITHUB_OUTPUT, `risk=${result.risk}\n`);
     appendFileSync(
       process.env.GITHUB_OUTPUT,
-      `auto_merge=${result.passed && result.risk === "LOW" ? "true" : "false"}\n`
+      `auto_merge=${result.passed && result.risk === "LOW" ? "true" : "false"}\n`,
     );
     appendFileSync(process.env.GITHUB_OUTPUT, `plugin_id=${result.pluginId}\n`);
   }

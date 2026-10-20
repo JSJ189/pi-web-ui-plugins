@@ -33,7 +33,9 @@ export async function validatePluginSchema(data) {
     const validate = ajv.compile(schema);
     const valid = validate(data);
     if (!valid) {
-      const errors = (validate.errors || []).map((err) => `${err.instancePath || "/"} ${err.message}`);
+      const errors = (validate.errors || []).map(
+        (err) => `${err.instancePath || "/"} ${err.message}`,
+      );
       return { valid: false, errors };
     }
     return { valid: true, errors: [] };
@@ -50,7 +52,10 @@ export async function validatePluginSchema(data) {
   if (data.id && !/^[A-Za-z0-9_-]+$/.test(data.id)) {
     errors.push("Property 'id' does not match pattern ^[A-Za-z0-9_-]+$");
   }
-  if (data.iconSvg && (!data.iconSvg.startsWith("<svg") || !data.iconSvg.endsWith("</svg>"))) {
+  if (
+    data.iconSvg &&
+    (!data.iconSvg.startsWith("<svg") || !data.iconSvg.endsWith("</svg>"))
+  ) {
     errors.push("Property 'iconSvg' must begin with <svg and end with </svg>");
   }
   return { valid: errors.length === 0, errors };

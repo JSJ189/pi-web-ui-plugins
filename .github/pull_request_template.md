@@ -21,6 +21,7 @@
 ### 🤖 Automated Audit Notice
 
 Once this PR is submitted, our automated CI bot will:
+
 1. Verify the PR scope (only single `plugins/<id>/plugin.json` allowed).
 2. Validate metadata against the JSON Schema.
 3. Fetch the remote repository manifest and verify compatibility.

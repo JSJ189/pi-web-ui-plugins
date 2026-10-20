@@ -1,6 +1,8 @@
 # pi-web-ui Community Plugin Registry
 
-> `pi-web-ui` 官方社区插件清单仓库，支持第三方插件提交、GitHub Actions 自动化审查（CI Audit）与自动合并（Auto-Merge）。
+> `pi-web-ui` 官方社区第三方插件清单仓库，供独立开发者与贡献者提交插件、GitHub Actions 自动化安全审查（CI Audit）与自动合并（Auto-Merge）。
+>
+> 💡 **说明**：`pi-web-ui` 项目自带的官方内置插件（如 notes, vscode-editor, browser-use, tts 等）随主仓库直接分发维护，不需要且不在此仓库提交。本仓库专供第三方社区独立插件提交与收录。
 
 ---
 
@@ -23,25 +25,31 @@
 > 会自动拉取 `https://xing-shuyin.github.io/pi-web-ui-plugins/catalog.json` 并同步进插件市场，无需任何配置。
 
 ### 方式 1：覆盖默认清单（可选）
+
 如需改用自定义清单或本地文件，启动 `pi-web-ui` 时显式指定：
+
 ```bash
 export PI_WEB_PLUGIN_CATALOG_URL="https://your-own-catalog.example/catalog.json"
 pi-web-ui
 ```
 
 ### 方式 2：关闭默认同步（可选）
+
 显式设为空串或 `off` / `0` / `false` / `no` 即可关闭开机预同步：
+
 ```bash
 export PI_WEB_PLUGIN_CATALOG_URL="off"
 pi-web-ui
 ```
 
 ### 方式 3：客户端动态同步
+
 在 `pi-web-ui` 界面中，通过支持目录同步的插件或控制台直接调用：
+
 ```javascript
 window.__piWebUiHost.reloadCatalog(
   "https://xing-shuyin.github.io/pi-web-ui-plugins/catalog.json",
-  { replace: false }
+  { replace: false },
 );
 ```
 
@@ -57,7 +65,7 @@ npm install
 npm test
 
 # 3. 针对特定插件进行审计测试
-node scripts/audit.mjs --target notes
+node scripts/audit.mjs --target pi-web-multigit
 
 # 4. 构建聚合目录
 npm run build

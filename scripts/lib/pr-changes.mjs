@@ -18,7 +18,10 @@ export function getChangedFiles(baseRef = "origin/main") {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     });
-    return output.split("\n").map((s) => s.trim()).filter(Boolean);
+    return output
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean);
   } catch {
     // 如果没有 origin/main，尝试对比 HEAD~1
     try {
@@ -27,7 +30,10 @@ export function getChangedFiles(baseRef = "origin/main") {
         encoding: "utf8",
         stdio: ["ignore", "pipe", "ignore"],
       });
-      return output.split("\n").map((s) => s.trim()).filter(Boolean);
+      return output
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
     } catch {
       return [];
     }
@@ -42,7 +48,11 @@ export function getChangedFiles(baseRef = "origin/main") {
 export function auditPrScope(changedFiles) {
   const errors = [];
   if (!changedFiles || changedFiles.length === 0) {
-    return { ok: false, pluginId: null, errors: ["No files changed in this PR."] };
+    return {
+      ok: false,
+      pluginId: null,
+      errors: ["No files changed in this PR."],
+    };
   }
 
   const touchedPluginIds = new Set();
@@ -58,13 +68,17 @@ export function auditPrScope(changedFiles) {
       normalized === "package.json" ||
       normalized === "package-lock.json"
     ) {
-      errors.push(`Forbidden change to protected file: "${file}". PRs may only touch files under plugins/<id>/.`);
+      errors.push(
+        `Forbidden change to protected file: "${file}". PRs may only touch files under plugins/<id>/.`,
+      );
       continue;
     }
 
     const match = normalized.match(/^plugins\/([A-Za-z0-9_-]+)\/plugin\.json$/);
     if (!match) {
-      errors.push(`File "${file}" is not allowed. Only "plugins/<plugin-id>/plugin.json" can be modified or added.`);
+      errors.push(
+        `File "${file}" is not allowed. Only "plugins/<plugin-id>/plugin.json" can be modified or added.`,
+      );
       continue;
     }
 
@@ -75,11 +89,12 @@ export function auditPrScope(changedFiles) {
     errors.push("No plugin.json found in PR changes.");
   } else if (touchedPluginIds.size > 1) {
     errors.push(
-      `A single PR can only submit or update 1 plugin at a time. Found ${touchedPluginIds.size} plugins: ${[...touchedPluginIds].join(", ")}`
+      `A single PR can only submit or update 1 plugin at a time. Found ${touchedPluginIds.size} plugins: ${[...touchedPluginIds].join(", ")}`,
     );
   }
 
-  const pluginId = touchedPluginIds.size === 1 ? [...touchedPluginIds][0] : null;
+  const pluginId =
+    touchedPluginIds.size === 1 ? [...touchedPluginIds][0] : null;
 
   return {
     ok: errors.length === 0,

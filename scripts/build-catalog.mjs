@@ -34,7 +34,10 @@ function buildCatalog() {
       };
       entries.push(entry);
     } catch (err) {
-      console.error(`⚠️ Failed to parse plugins/${id}/plugin.json:`, err.message);
+      console.error(
+        `⚠️ Failed to parse plugins/${id}/plugin.json:`,
+        err.message,
+      );
     }
   }
 
@@ -84,7 +87,7 @@ function buildCatalog() {
           来源: <a href="${e.homepage || `https://github.com/${e.source.split("#")[0]}`}" target="_blank">${e.source}</a>
         </div>
       </div>
-    `
+    `,
       )
       .join("")}
   </div>
